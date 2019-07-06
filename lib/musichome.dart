@@ -38,7 +38,7 @@ class _musicState extends State<MusicHome> {
   DatabaseClient db;
   bool isLoading = true;
   Song last;
-  Color color = Colors.deepPurple;
+  Color color = Colors.indigo;
   var themeLoading = true;
 
   getDrawerItemWidget(int pos) {

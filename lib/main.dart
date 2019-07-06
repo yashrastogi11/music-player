@@ -14,9 +14,10 @@ class MyApp extends StatelessWidget {
         defaultBrightness: Brightness.light,
         data: (brightness) =>
         new ThemeData(
-          primarySwatch: Colors.deepPurple,
-          accentColor: Colors.deepPurpleAccent,
-          fontFamily: 'Raleway',
+          primarySwatch: Colors.indigo,
+          accentColor: Colors.indigoAccent,
+          // fontFamily: 'Raleway',
+          fontFamily: 'ProximaNova',
           brightness: brightness,
         ),
         themedWidgetBuilder: (context, theme) {

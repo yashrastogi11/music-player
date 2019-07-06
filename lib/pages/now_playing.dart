@@ -34,7 +34,7 @@ class _stateNowPlaying extends State<NowPlaying> with TickerProviderStateMixin {
   AnimationController _animationController;
   Animation<Color> _animateColor;
   bool isOpened = true;
-  String status = 'hidden';
+  String status = 'Hidden';
   Animation<double> _animateIcon;
 
   Animation<double> animation;
@@ -61,7 +61,7 @@ class _stateNowPlaying extends State<NowPlaying> with TickerProviderStateMixin {
     });
 
     MediaNotification.setListener('select', () {
-      // yet to be impl
+      // hide();
     });
   }
 
@@ -88,8 +88,8 @@ class _stateNowPlaying extends State<NowPlaying> with TickerProviderStateMixin {
     _animateIcon =
         Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _animateColor = ColorTween(
-      begin: Colors.deepPurple,
-      end: Colors.purpleAccent[700],
+      begin: Colors.indigo,
+      end: Colors.indigoAccent[700],
     ).animate(CurvedAnimation(
       parent: _animationController,
       curve: Interval(
@@ -153,7 +153,7 @@ class _stateNowPlaying extends State<NowPlaying> with TickerProviderStateMixin {
     print("count=${song.count}");
 
     // if (widget.db != null && song.id != 9999 /*shared song id*/)
-      widget.db.updateSong(song);
+    widget.db.updateSong(song);
 
     player.play(song.uri);
     ScopedModel.of<SongModel>(context).updateUI(song, widget.db);
@@ -230,7 +230,6 @@ class _stateNowPlaying extends State<NowPlaying> with TickerProviderStateMixin {
       key: scaffoldState,
       body: Stack(children: <Widget>[
         orientation == Orientation.portrait ? potrait() : landscape(),
-
         new Positioned(
           //Place it at the top, and not use the entire screen
           top: 0.0,
@@ -242,7 +241,7 @@ class _stateNowPlaying extends State<NowPlaying> with TickerProviderStateMixin {
             elevation: 0.0, //Shadow gone
             leading: IconButton(
               icon: Icon(Icons.clear),
-              onPressed: () => {Navigator.pop(context)},
+              onPressed: () => Navigator.pop(context),
             ),
           ),
         ),
@@ -278,7 +277,7 @@ class _stateNowPlaying extends State<NowPlaying> with TickerProviderStateMixin {
                           trailing: song.id == widget.songs[i].id
                               ? new Icon(
                                   Icons.play_circle_filled,
-                                  color: Colors.deepPurple,
+                                  color: Colors.indigo,
                                 )
                               : new Text(
                                   (i + 1).toString(),
@@ -301,275 +300,284 @@ class _stateNowPlaying extends State<NowPlaying> with TickerProviderStateMixin {
   Widget potrait() {
     return new Container(
       // color: Colors.transparent,
-      child: song == null ? Container() : new Column(
-        children: <Widget>[
-          new AspectRatio(
-            aspectRatio: 15 / 15,
-            child: new Hero(
-              tag: song.id,
-              child: getImage(song) != null
-                  ? new Image.file(
-                      getImage(song),
-                      fit: BoxFit.cover,
-                    )
-                  : new Image.asset(
-                      "images/back.jpg",
-                      fit: BoxFit.fitHeight,
-                    ),
-            ),
-          ),
-          new Slider(
-            min: 0.0,
-            value: position?.inMilliseconds?.toDouble() ?? 0.0,
-            max: song.duration.toDouble() + 1000,
-            onChanged: (double value) =>
-                player.seek((value / 1000).roundToDouble()),
-            divisions: song.duration,
-          ),
-          new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              new Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: new Text(position.toString().split('.').first),
-              ),
-              new Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: new Text(
-                  new Duration(milliseconds: song.duration)
-                      .toString()
-                      .split('.')
-                      .first,
+      child: song == null
+          ? Container()
+          : new Column(
+              children: <Widget>[
+                new AspectRatio(
+                  aspectRatio: 15 / 15,
+                  child: new Hero(
+                    tag: song.id,
+                    child: getImage(song) != null
+                        ? new Image.file(
+                            getImage(song),
+                            fit: BoxFit.cover,
+                          )
+                        : new Image.asset(
+                            "images/back.jpg",
+                            fit: BoxFit.fitHeight,
+                          ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          new Expanded(
-            child: new Center(
-              child: new Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  new Text(
-                    song.title,
-                    maxLines: 1,
-                    textAlign: TextAlign.center,
-                    style: new TextStyle(
-                        fontSize: 20.0, fontWeight: FontWeight.bold),
+                new Slider(
+                  min: 0.0,
+                  value: position?.inMilliseconds?.toDouble() ?? 0.0,
+                  max: song.duration.toDouble() + 1000,
+                  onChanged: (double value) =>
+                      player.seek((value / 1000).roundToDouble()),
+                  divisions: song.duration,
+                ),
+                new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    new Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: new Text(position.toString().split('.').first),
+                    ),
+                    new Padding(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: new Text(
+                        new Duration(milliseconds: song.duration)
+                            .toString()
+                            .split('.')
+                            .first,
+                      ),
+                    ),
+                  ],
+                ),
+                new Expanded(
+                  child: new Center(
+                    child: new Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Text(
+                          song.title,
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: new TextStyle(
+                              fontSize: 20.0, fontWeight: FontWeight.bold),
+                        ),
+                        new Text(
+                          song.artist,
+                          maxLines: 1,
+                          style:
+                              new TextStyle(fontSize: 14.0, color: Colors.grey),
+                        ),
+                      ],
+                    ),
                   ),
-                  new Text(
-                    song.artist,
-                    maxLines: 1,
-                    style: new TextStyle(fontSize: 14.0, color: Colors.grey),
+                ),
+                new Expanded(
+                  child: new Center(
+                    child: new Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        ScopedModelDescendant<SongModel>(
+                          builder: (context, child, model) {
+                            return new IconButton(
+                                icon: new Icon(Icons.skip_previous, size: 40.0),
+                                onPressed: () {
+                                  prev();
+                                  model.updateUI(song, widget.db);
+                                });
+                          },
+                        ),
+                        new FloatingActionButton(
+                          backgroundColor: _animateColor.value,
+                          child: new AnimatedIcon(
+                              icon: AnimatedIcons.pause_play,
+                              progress: _animateIcon),
+                          onPressed: _playpause,
+                        ),
+                        ScopedModelDescendant<SongModel>(
+                          builder: (context, child, model) {
+                            return new IconButton(
+                                icon: new Icon(Icons.skip_next, size: 40.0),
+                                onPressed: () {
+                                  next();
+                                  model.updateUI(song, widget.db);
+                                });
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+                new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    new IconButton(
+                        tooltip: "Shuffle",
+                        icon: new Icon(Icons.shuffle),
+                        onPressed: () {
+                          widget.songs.shuffle();
+
+                          scaffoldState.currentState.showSnackBar(
+                              new SnackBar(content: new Text("List Suffled")));
+                        }),
+                    new IconButton(
+                        tooltip: "Playing queue",
+                        icon: new Icon(Icons.queue_music),
+                        onPressed: _showBottomSheet),
+                    new IconButton(
+                        tooltip: "Add to favourites",
+                        icon: Icon(Icons.playlist_add),
+                        onPressed: () {
+                          setFav(song);
+
+                          scaffoldState.currentState.showSnackBar(new SnackBar(
+                              content: new Text("Song added to favourites")));
+                        })
+                  ],
+                )
+              ],
             ),
-          ),
-          new Expanded(
-            child: new Center(
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  ScopedModelDescendant<SongModel>(
-                    builder: (context, child, model) {
-                      return new IconButton(
-                          icon: new Icon(Icons.skip_previous, size: 40.0),
-                          onPressed: () {
-                            prev();
-                            model.updateUI(song, widget.db);
-                          });
-                    },
-                  ),
-                  new FloatingActionButton(
-                    backgroundColor: _animateColor.value,
-                    child: new AnimatedIcon(
-                        icon: AnimatedIcons.pause_play, progress: _animateIcon),
-                    onPressed: _playpause,
-                  ),
-                  ScopedModelDescendant<SongModel>(
-                    builder: (context, child, model) {
-                      return new IconButton(
-                          icon: new Icon(Icons.skip_next, size: 40.0),
-                          onPressed: () {
-                            next();
-                            model.updateUI(song, widget.db);
-                          });
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-          new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              new IconButton(
-                  tooltip: "Shuffle",
-                  icon: new Icon(Icons.shuffle),
-                  onPressed: () {
-                    widget.songs.shuffle();
-
-                    scaffoldState.currentState.showSnackBar(
-                        new SnackBar(content: new Text("List Suffled")));
-                  }),
-              new IconButton(
-                  tooltip: "Playing queue",
-                  icon: new Icon(Icons.queue_music),
-                  onPressed: _showBottomSheet),
-              new IconButton(
-                  tooltip: "Add to favourites",
-                  icon: Icon(Icons.playlist_add),
-
-                  onPressed: () {
-                    setFav(song);
-
-                    scaffoldState.currentState.showSnackBar(new SnackBar(
-                        content: new Text("Song added to favourites")));
-                  })
-            ],
-          )
-        ],
-      ),
     );
   }
 
   Widget landscape() {
-    return song == null ? Container() : new Row(
-      children: <Widget>[
-        new Container(
-          width: 350.0,
-          child: new AspectRatio(
-              aspectRatio: 15 / 19,
-              child: new Hero(
-                tag: song.id,
-                child: getImage(song) != null
-                    ? new Image.file(
-                        getImage(song),
-                        fit: BoxFit.cover,
-                      )
-                    : new Image.asset(
-                        "images/back.jpg",
-                        fit: BoxFit.fitHeight,
-                      ),
-              )),
-        ),
-        new Expanded(
-          child: new Column(
+    return song == null
+        ? Container()
+        : new Row(
             children: <Widget>[
+              new Container(
+                width: 350.0,
+                child: new AspectRatio(
+                    aspectRatio: 15 / 19,
+                    child: new Hero(
+                      tag: song.id,
+                      child: getImage(song) != null
+                          ? new Image.file(
+                              getImage(song),
+                              fit: BoxFit.cover,
+                            )
+                          : new Image.asset(
+                              "images/back.jpg",
+                              fit: BoxFit.fitHeight,
+                            ),
+                    )),
+              ),
               new Expanded(
-                child: new Center(
-                  child: new Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new Text(
-                        song.title,
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        style: new TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                child: new Column(
+                  children: <Widget>[
+                    new Expanded(
+                      child: new Center(
+                        child: new Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            new Text(
+                              song.title,
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              style: new TextStyle(
+                                  fontSize: 20.0, fontWeight: FontWeight.bold),
+                            ),
+                            new Text(
+                              song.artist,
+                              maxLines: 1,
+                              style: new TextStyle(
+                                  fontSize: 14.0, color: Colors.grey),
+                            ),
+                          ],
+                        ),
                       ),
-                      new Text(
-                        song.artist,
-                        maxLines: 1,
-                        style:
-                            new TextStyle(fontSize: 14.0, color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              new Slider(
-                min: 0.0,
-                value: position?.inMilliseconds?.toDouble() ?? 0.0,
-                onChanged: (double value) =>
-                    player.seek((value / 1000).roundToDouble()),
-                max: song.duration.toDouble() + 1000,
-              ),
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  new Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: new Text(position.toString().split('.').first),
-                  ),
-                  new Padding(
-                    padding: const EdgeInsets.only(right: 16.0),
-                    child: new Text(
-                      new Duration(milliseconds: song.duration)
-                          .toString()
-                          .split('.')
-                          .first,
                     ),
-                  ),
-                ],
-              ),
-              new Expanded(
-                child: new Center(
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      ScopedModelDescendant<SongModel>(
-                        builder: (context, child, model) {
-                          return new IconButton(
-                              icon: new Icon(Icons.skip_previous, size: 40.0),
-                              onPressed: () {
-                                prev();
-                                model.updateUI(song, widget.db);
-                              });
-                        },
+                    new Slider(
+                      min: 0.0,
+                      value: position?.inMilliseconds?.toDouble() ?? 0.0,
+                      onChanged: (double value) =>
+                          player.seek((value / 1000).roundToDouble()),
+                      max: song.duration.toDouble() + 1000,
+                    ),
+                    new Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        new Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: new Text(position.toString().split('.').first),
+                        ),
+                        new Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: new Text(
+                            new Duration(milliseconds: song.duration)
+                                .toString()
+                                .split('.')
+                                .first,
+                          ),
+                        ),
+                      ],
+                    ),
+                    new Expanded(
+                      child: new Center(
+                        child: new Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            ScopedModelDescendant<SongModel>(
+                              builder: (context, child, model) {
+                                return new IconButton(
+                                    icon: new Icon(Icons.skip_previous,
+                                        size: 40.0),
+                                    onPressed: () {
+                                      prev();
+                                      model.updateUI(song, widget.db);
+                                    });
+                              },
+                            ),
+                            //fab,
+                            new FloatingActionButton(
+                              backgroundColor: _animateColor.value,
+                              child: new AnimatedIcon(
+                                  icon: AnimatedIcons.pause_play,
+                                  progress: _animateIcon),
+                              onPressed: _playpause,
+                            ),
+                            ScopedModelDescendant<SongModel>(
+                              builder: (context, child, model) {
+                                return new IconButton(
+                                    icon: new Icon(Icons.skip_next, size: 40.0),
+                                    onPressed: () {
+                                      next();
+                                      model.updateUI(song, widget.db);
+                                    });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                      //fab,
-                      new FloatingActionButton(
-                        backgroundColor: _animateColor.value,
-                        child: new AnimatedIcon(
-                            icon: AnimatedIcons.pause_play,
-                            progress: _animateIcon),
-                        onPressed: _playpause,
-                      ),
-                      ScopedModelDescendant<SongModel>(
-                        builder: (context, child, model) {
-                          return new IconButton(
-                              icon: new Icon(Icons.skip_next, size: 40.0),
-                              onPressed: () {
-                                next();
-                                model.updateUI(song, widget.db);
-                              });
-                        },
-                      ),
-                    ],
-                  ),
+                    ),
+                    new Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        new IconButton(
+                            tooltip: "Shuffle",
+                            icon: new Icon(Icons.shuffle),
+                            onPressed: () {
+                              widget.songs.shuffle();
+                              scaffoldState.currentState.showSnackBar(
+                                  new SnackBar(
+                                      content: new Text("List Suffled")));
+                            }),
+                        new IconButton(
+                            tooltip: "Playing queue",
+                            icon: new Icon(Icons.queue_music),
+                            onPressed: _showBottomSheet),
+                        new IconButton(
+                            icon: Icon(Icons.playlist_add),
+                            tooltip: "Add to Favourite",
+                            onPressed: () {
+                              setFav(song);
+                              scaffoldState.currentState.showSnackBar(
+                                  new SnackBar(
+                                      content: new Text(
+                                          "Song added to favourites")));
+                            })
+                      ],
+                    )
+                  ],
                 ),
-              ),
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  new IconButton(
-                      tooltip: "Shuffle",
-                      icon: new Icon(Icons.shuffle),
-                      onPressed: () {
-                        widget.songs.shuffle();
-                        scaffoldState.currentState.showSnackBar(
-                            new SnackBar(content: new Text("List Suffled")));
-                      }),
-                  new IconButton(
-                      tooltip: "Playing queue",
-                      icon: new Icon(Icons.queue_music),
-                      onPressed: _showBottomSheet),
-                  new IconButton(
-                      icon: Icon(Icons.playlist_add),
-                      tooltip: "Add to Favourite",
-                      onPressed: () {
-                        setFav(song);
-                        scaffoldState.currentState.showSnackBar(new SnackBar(
-                            content: new Text("Song added to favourites")));
-                      })
-                ],
               )
             ],
-          ),
-        )
-      ],
-    );
+          );
   }
 
   Future<void> setFav(song) async {

@@ -62,6 +62,11 @@ flutter:
         - asset: fonts/Raleway-Regular.ttf
         - asset: fonts/Raleway-Italic.ttf
           style: italic
+    - family: ProximaNova
+      fonts:
+        - asset: fonts/ProximaNova-Regular.ttf
+        - asset: fonts/ProximaNova-Italic.otf
+          style: italic
 
   #  - images/a_dot_ham.jpeg
 

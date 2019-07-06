@@ -24,7 +24,7 @@ class WalkState extends State<TestScreen> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.indigo,
         body: SafeArea(
           child: new Container(
             height: MediaQuery.of(context).size.height,

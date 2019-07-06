@@ -38,7 +38,7 @@ class _statePlaylist extends State<PlayList> {
           leading: new Icon(Icons.call_received,
               color: Theme.of(context).accentColor),
           title: new Text("Recently played"),
-          subtitle: new Text("songs"),
+          subtitle: new Text("Songs"),
           onTap: () {
             Navigator.of(context)
                 .push(new MaterialPageRoute(builder: (context) {
@@ -51,7 +51,7 @@ class _statePlaylist extends State<PlayList> {
           leading:
               new Icon(Icons.show_chart, color: Theme.of(context).accentColor),
           title: new Text("Top tracks"),
-          subtitle: new Text("songs"),
+          subtitle: new Text("Songs"),
           onTap: () {
             Navigator.of(context)
                 .push(new MaterialPageRoute(builder: (context) {
@@ -89,7 +89,7 @@ class _statePlaylist extends State<PlayList> {
                 title: new Text("Recently played",
                     style: new TextStyle(
                         color: selected == 1 ? Colors.blue : Colors.black)),
-                subtitle: new Text("songs"),
+                subtitle: new Text("Songs"),
                 onTap: () {
                   setState(() {
                     mode = 1;
@@ -103,7 +103,7 @@ class _statePlaylist extends State<PlayList> {
                 title: new Text("Top tracks",
                     style: new TextStyle(
                         color: selected == 2 ? Colors.blue : Colors.black)),
-                subtitle: new Text("songs"),
+                subtitle: new Text("Songs"),
                 onTap: () {
                   setState(() {
                     mode = 2;
